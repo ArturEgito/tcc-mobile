@@ -22,68 +22,55 @@ class _TelaPizzasState extends State<TelaPizzas> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.account_circle, size: 30),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/perfil');
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.shopping_cart, size: 30, color: Colors.black),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Carrinho de compras!')),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+        elevation: 1,
+        toolbarHeight: 80,
         title: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Focus(
-            onFocusChange: (hasFocus) {
-              setState(() {});
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: searchQuery.isNotEmpty ? Colors.blue : Colors.grey,
-                  width: 2.0,
-                ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: searchQuery.isNotEmpty ? Colors.blue : Colors.grey[300]!,
+                width: 1.5,
               ),
-              child: TextField(
-                onChanged: (query) {
-                  setState(() {
-                    searchQuery = query;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Pesquisar Produto...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                ),
+            ),
+            child: TextField(
+              onChanged: (query) {
+                setState(() => searchQuery = query);
+              },
+              decoration: const InputDecoration(
+                labelText: 'Pesquisar produto...',
+                prefixIcon: Icon(Icons.search),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               ),
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle, size: 30, color: Colors.black87),
+            onPressed: () => Navigator.pushNamed(context, '/perfil'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart, size: 30, color: Colors.black87),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Carrinho de compras!')),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: Container(
         color: Colors.white,
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
@@ -91,24 +78,28 @@ class _TelaPizzasState extends State<TelaPizzas> {
                   children: [
                     FilterButton(
                       label: 'Todas',
+                      isSelected: selectedCategory == 'Todas',
                       onTap: () => setState(() => selectedCategory = 'Todas'),
                     ),
                     FilterButton(
                       label: 'Bebidas',
+                      isSelected: selectedCategory == 'Bebidas',
                       onTap: () => setState(() => selectedCategory = 'Bebidas'),
                     ),
                     FilterButton(
                       label: 'Salgadinhos',
+                      isSelected: selectedCategory == 'Salgadinhos',
                       onTap: () => setState(() => selectedCategory = 'Salgadinhos'),
                     ),
                     FilterButton(
                       label: 'Sorvetes',
+                      isSelected: selectedCategory == 'Sorvetes',
                       onTap: () => setState(() => selectedCategory = 'Sorvetes'),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -177,24 +168,27 @@ final List<Pizza> pizzas = [
 
 class FilterButton extends StatelessWidget {
   final String label;
+  final bool isSelected;
   final VoidCallback onTap;
 
-  const FilterButton({super.key, required this.label, required this.onTap});
+  const FilterButton({
+    super.key,
+    required this.label,
+    this.isSelected = false,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.blue),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isSelected ? Colors.blue : Colors.grey[200],
+        foregroundColor: isSelected ? Colors.white : Colors.black87,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: isSelected ? 4 : 0,
       ),
       onPressed: onTap,
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white),
-      ),
+      child: Text(label),
     );
   }
 }
@@ -206,22 +200,22 @@ class PizzaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Imagem de: ${pizza.nome}')),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => PizzaDetailScreen(pizza: pizza)),
         );
       },
       child: Card(
-        color: Colors.white,
-        elevation: 10,
-        shadowColor: Colors.black45,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.only(bottom: 16),
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.network(
                 pizza.imagemUrl,
                 height: 160,
@@ -232,31 +226,31 @@ class PizzaCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     pizza.nome,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     "R\$ ${pizza.preco.toStringAsFixed(2)}",
-                    style: const TextStyle(color: Colors.black54),
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/formas_pagamento');
-                    },
-                    icon: const Icon(Icons.shopping_cart_checkout),
-                    label: const Text('Pedir'),
-                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.shopping_cart_checkout),
+                      label: const Text('Pedir'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/formas_pagamento');
+                      },
+                    ),
+                  )
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
