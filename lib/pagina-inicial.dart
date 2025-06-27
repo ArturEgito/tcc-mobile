@@ -41,7 +41,7 @@ class _TelaPizzasState extends State<TelaPizzas> {
                 setState(() => searchQuery = query);
               },
               decoration: const InputDecoration(
-                labelText: 'Pesquisar produto...',
+                labelText: 'Pesquisar produtos...',
                 prefixIcon: Icon(Icons.search),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
