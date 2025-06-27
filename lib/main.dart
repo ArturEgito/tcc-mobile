@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'pagina-inicial.dart';
+import 'pagamento.dart';
+import 'perfil.dart';
 
 void main() {
   runApp(const FinnTechApp());
@@ -18,6 +21,14 @@ class FinnTechApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
+        '/home': (context) => const TelaPizzas(),
+        '/formas_pagamento': (context) => const FormasPagamentoPage(),
+        '/pagamento_dinheiro': (context) => const PagamentoDinheiroPage(),
+        '/pagamento_cartao': (context) => const PagamentoCartaoPage(),
+        '/pagamento_credito': (context) => const PagamentoCreditoPage(),
+        '/pagamento_debito': (context) => const PagamentoDebitoPage(),
+        '/pagamento_pix': (context) => const PagamentoPixPage(),
+        '/perfil': (context) => ProfilePage(),
       },
     );
   }
@@ -120,7 +131,9 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFE44C),
                     minimumSize: const Size(double.infinity, 48),
