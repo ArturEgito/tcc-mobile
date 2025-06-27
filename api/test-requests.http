@@ -1,0 +1,38 @@
+### Testar status da API
+GET http://localhost:3000/api/status
+
+### Listar todos os produtos
+GET http://localhost:3000/api/produtos
+
+### Filtrar produtos por categoria
+GET http://localhost:3000/api/produtos?categoria=Bebidas
+
+### Registrar usuário
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@teste.com",
+  "telefone": "11999999999",
+  "senha": "123456"
+}
+
+### Fazer login
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "joao@teste.com",
+  "senha": "123456"
+}
+
+### Criar pedido
+POST http://localhost:3000/api/pedidos
+Content-Type: application/json
+
+{
+  "produto_id": 1,
+  "quantidade": 2,
+  "forma_pagamento": "pix"
+}
